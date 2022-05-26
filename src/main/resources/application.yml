@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/springboot_demo?characterEncoding=utf-8&serverTimezone=UTC
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #设置MyBatis-Plus的全局配置
+    global-config:
+      db-config:
+        # 设置实体类所对应表的统一前缀
+        table-prefix: sys_
+        # 设置统一的主键生成策略
+        id-type: auto
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.wsf.springbootdemo.pojo
+server:
+  port: 8888

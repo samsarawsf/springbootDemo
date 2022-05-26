@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wsf.springbootdemo.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.wsf.springbootdemo.pojo.User">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+            <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="phonenumber" column="phonenumber" jdbcType="VARCHAR"/>
+            <result property="sex" column="sex" jdbcType="CHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="CHAR"/>
+            <result property="userType" column="user_type" jdbcType="CHAR"/>
+            <result property="createBy" column="create_by" jdbcType="BIGINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="BIGINT"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="delFlag" column="del_flag" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="UserListMap"  type="com.wsf.springbootdemo.pojo.User" extends="BaseResultMap">
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+        <result property="createName" column="create_name" jdbcType="VARCHAR"/>
+        <result property="updateName" column="update_name" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,user_name,nick_name,
+        password,phonenumber,sex,
+        email,status,user_type,
+        create_by,create_time,update_by,
+        update_time,del_flag
+    </sql>
+
+    <select id="getUserList" resultMap="UserListMap">
+        SELECT u1.*,r.`name` role_name,u2.`user_name` create_name,u2.`user_name` update_name
+        FROM sys_user u1 LEFT JOIN sys_user u2 ON u1.`create_by` = u2.`id`
+                         LEFT JOIN sys_role r ON u1.`user_type` = r.`id`  AND u1.`del_flag` =0
+    </select>
+</mapper>
