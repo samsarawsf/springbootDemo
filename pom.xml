@@ -12,6 +12,7 @@
     <artifactId>springbootDemo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>springbootDemo</name>
+    <packaging>jar</packaging>
     <description>springbootDemo</description>
     <properties>
         <java.version>1.8</java.version>
