@@ -1,12 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mysql://8.130.21.96:3306/springbootdemo?characterEncoding=utf-8&serverTimezone=UTC
-    username: wsf
+    url: jdbc:mysql://localhost:3306/springboot_demo?characterEncoding=utf-8&serverTimezone=UTC
+    username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-  redis:
-    host: 8.130.21.96
-    port: 6379
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
