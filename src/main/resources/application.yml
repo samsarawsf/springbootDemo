@@ -18,5 +18,3 @@ mybatis-plus:
   type-aliases-package: com.wsf.springbootdemo.pojo
 server:
   port: 7777
-  servlet:
-    context-path: /api
