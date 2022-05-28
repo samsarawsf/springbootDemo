@@ -211,8 +211,11 @@ public class UserController {
     public ResponseResult changeRole(Long id,Long roleId){
 
         boolean userUpdate = userService.update(new UpdateWrapper<User>().eq("id", id).set("user_type", roleId));
-        boolean userRoleUpdate = userRoleService.updateById(new UserRole(id, roleId));
-        if(userUpdate&&userRoleUpdate){
+        //先删除user_role表里的该id的的数据
+        userRoleService.remove(new QueryWrapper<UserRole>().eq(!Objects.isNull(id),"user_id",id));
+        //再添加数据
+        boolean save = userRoleService.save(new UserRole(id, roleId));
+        if(userUpdate&&save){
             return new ResponseResult(200,"角色分配成功");
         }
         return new ResponseResult(200,"角色分配失败");

@@ -19,10 +19,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRole implements Serializable {
+
+
+    @TableId(type = IdType.AUTO)
+    private Long id;
     /**
      * 用户id
      */
-    @TableId(type = IdType.AUTO)
     private Long userId;
 
     /**
@@ -32,4 +35,9 @@ public class UserRole implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+    public UserRole(Long userId, Long roleId) {
+        this.userId = userId;
+        this.roleId = roleId;
+    }
 }

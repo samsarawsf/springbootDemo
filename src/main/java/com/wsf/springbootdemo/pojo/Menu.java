@@ -3,6 +3,7 @@ package com.wsf.springbootdemo.pojo;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +44,16 @@ public class Menu implements Serializable {
     private String perms;
 
     /**
+     * 图标
+     */
+    private String icon;
+
+    /**
+     * 链接
+     */
+    private String url;
+
+    /**
      * 菜单状态（0正常 1停用）'
      */
     private String status;
@@ -79,6 +90,6 @@ public class Menu implements Serializable {
     private String remark;
 
     @TableField(exist = false)
-    private List<Menu> menus;
+    private List<Menu> menus = new ArrayList<>();
 
 }
