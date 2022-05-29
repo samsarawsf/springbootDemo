@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -69,6 +71,12 @@ public class Employee implements Serializable {
      */
     @TableLogic
     private Integer delFlag;
+
+    @TableField(exist = false)
+    private Dept dept;
+
+    @TableField(exist = false)
+    private Job job;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

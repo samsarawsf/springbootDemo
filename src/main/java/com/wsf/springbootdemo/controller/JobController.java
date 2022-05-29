@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wsf.springbootdemo.pojo.Dept;
+import com.wsf.springbootdemo.pojo.Job;
 import com.wsf.springbootdemo.pojo.ResponseResult;
-import com.wsf.springbootdemo.pojo.Role;
-import com.wsf.springbootdemo.service.DeptService;
+import com.wsf.springbootdemo.service.JobService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,38 +21,38 @@ import java.util.Objects;
 
 /**
  * @author wsfstart
- * @create 2022-05-29 18:23
+ * @create 2022-05-29 21:02
  */
 @Slf4j
 @RestController
-@RequestMapping("/dept")
-public class DeptController {
+@RequestMapping("/job")
+public class JobController {
 
     @Autowired
-    private DeptService deptService;
+    private JobService jobService;
 
     @PostMapping("list")
-    @PreAuthorize("hasAuthority('system:Dept:list')")
+    @PreAuthorize("hasAuthority('system:Job:list')")
     public ResponseResult list(@RequestParam(required = false,defaultValue = "1") Integer page,
                                @RequestParam(required = false,defaultValue = "10") Integer limit,
                                String name){
         log.info("页码:"+page+"条数:"+limit);
-        Page<Dept> deptPage = new Page<>(page, limit);
-        QueryWrapper<Dept> wrapper = new QueryWrapper<>();
+        Page<Job> jobPage = new Page<>(page, limit);
+        QueryWrapper<Job> wrapper = new QueryWrapper<>();
         wrapper.like(StringUtils.isNotBlank(name),"name",name);
-        deptService.page(deptPage,wrapper);
-        return new ResponseResult(200,"请求部门列表成功",deptPage);
+        jobService.page(jobPage,wrapper);
+        return new ResponseResult(200,"请求职位列表成功",jobPage);
     }
 
 
     @PostMapping("save")
-    @PreAuthorize("hasAuthority('system:Dept:save')")
+    @PreAuthorize("hasAuthority('system:Job:save')")
     @Transactional
-    public ResponseResult save(Dept dept){
-        if(Objects.isNull(dept.getId())){
+    public ResponseResult save(Job job){
+        if(Objects.isNull(job.getId())){
             //如果为空就是添加操作
-            dept.setCreateTime(new Date());
-            boolean save = deptService.save(dept);
+            job.setCreateTime(new Date());
+            boolean save = jobService.save(job);
             if(save){
                 return new ResponseResult(200,"部门管理添加成功");
             }else{
@@ -60,7 +60,7 @@ public class DeptController {
             }
         }else{
             //修改
-            boolean update = deptService.updateById(dept);
+            boolean update = jobService.updateById(job);
             if(update){
                 return new ResponseResult(200,"部门管理修改成功");
             }else{
@@ -70,10 +70,10 @@ public class DeptController {
     }
 
     @PostMapping("delete")
-    @PreAuthorize("hasAuthority('system:Dept:delete')")
+    @PreAuthorize("hasAuthority('system:Job:delete')")
     @Transactional
     public ResponseResult delete(Long id){
-        if(deptService.removeById(id)){
+        if(jobService.removeById(id)){
             return new ResponseResult(200,"删除成功");
         }else{
             return new ResponseResult(500,"删除失败");
@@ -81,13 +81,13 @@ public class DeptController {
     }
 
     @PostMapping("status")
-    @PreAuthorize("hasAuthority('system:Dept:save')")
+    @PreAuthorize("hasAuthority('system:Job:save')")
     @Transactional
     public ResponseResult status(Long id,String status){
-        Dept dept = new Dept();
-        dept.setId(id);
-        dept.setStatus(status);
-        if(deptService.updateById(dept)){
+        Job job = new Job();
+        job.setId(id);
+        job.setStatus(status);
+        if(jobService.updateById(job)){
             return new ResponseResult(200,"修改状态成功");
         }
         else return  new ResponseResult(500,"修改状态失败");
