@@ -30,34 +30,35 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu>
      * @return
      */
     public List<Menu> getMenuTree(){
-//        List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().eq("parent_id", 0));
-//        for (Menu menu:menus
-//             ) {
-//            menu.setMenus(menuMapper.selectList(new QueryWrapper<Menu>().eq("parent_id",menu.getId())));
-//            List<Menu> menus1 = menu.getMenus();
-//            for (Menu menu1:menus1
-//                 ) {
-//                menu1.setMenus(menuMapper.selectList(new QueryWrapper<Menu>().eq("parent_id",menu1.getId())));
-//            }
-//        }
-        List<Menu> finalMenus = new ArrayList<>();
-        List<Menu> menus = menuMapper.selectList(null);
-        for (Menu menu: menus
+        List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().eq("parent_id", 0));
+        for (Menu menu:menus
              ) {
-            //先寻找各自的孩子
-            for (Menu e:menus
+            menu.setMenus(menuMapper.selectList(new QueryWrapper<Menu>().eq("parent_id",menu.getId())));
+            List<Menu> menus1 = menu.getMenus();
+            for (Menu menu1:menus1
                  ) {
-                if(e.getParentId().equals(menu.getId())){
-                    menu.getMenus().add(e);
-                }
-            }
-
-            //提取出父节点
-            if(menu.getParentId().equals(0L)){
-                finalMenus.add(menu);
+                menu1.setMenus(menuMapper.selectList(new QueryWrapper<Menu>().eq("parent_id",menu1.getId())));
             }
         }
-        return finalMenus;
+        return menus;
+//        List<Menu> finalMenus = new ArrayList<>();
+//        List<Menu> menus = menuMapper.selectList(null);
+//        for (Menu menu: menus
+//             ) {
+//            //先寻找各自的孩子
+//            for (Menu e:menus
+//                 ) {
+//                if(e.getParentId().equals(menu.getId())){
+//                    menu.getMenus().add(e);
+//                }
+//            }
+//
+//            //提取出父节点
+//            if(menu.getParentId().equals(0L)){
+//                finalMenus.add(menu);
+//            }
+//        }
+//        return finalMenus;
     }
 }
 
