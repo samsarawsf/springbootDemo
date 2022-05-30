@@ -2,11 +2,13 @@ package com.wsf.springbootdemo.controller;
 
 import com.auth0.jwt.interfaces.Claim;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wsf.springbootdemo.pojo.Employee;
 import com.wsf.springbootdemo.pojo.ResponseResult;
 import com.wsf.springbootdemo.pojo.User;
+import com.wsf.springbootdemo.pojo.UserRole;
 import com.wsf.springbootdemo.service.DeptService;
 import com.wsf.springbootdemo.service.EmployeeService;
 import com.wsf.springbootdemo.service.JobService;
@@ -112,5 +114,28 @@ public class EmployeeController {
         }else{
             return new ResponseResult(500,"删除失败");
         }
+    }
+
+
+    @PostMapping("changeDept")
+    @PreAuthorize("hasAuthority('system:Emp:dept')")
+    @Transactional
+    public ResponseResult changeRole(Long id,Long deptId){
+        boolean deptUpdate = employeeService.update(new UpdateWrapper<Employee>().eq("id", id).set("dept_id", deptId));
+        if(deptUpdate){
+            return new ResponseResult(200,"部门分配成功");
+        }
+        return new ResponseResult(200,"部门分配失败");
+    }
+
+    @PostMapping("changeJob")
+    @PreAuthorize("hasAuthority('system:Emp:job')")
+    @Transactional
+    public ResponseResult changeJob(Long id,Long jobId){
+        boolean deptUpdate = employeeService.update(new UpdateWrapper<Employee>().eq("id", id).set("job_id", jobId));
+        if(deptUpdate){
+            return new ResponseResult(200,"岗位分配成功");
+        }
+        return new ResponseResult(200,"岗位分配失败");
     }
 }
