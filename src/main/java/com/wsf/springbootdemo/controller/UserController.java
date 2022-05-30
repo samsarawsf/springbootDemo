@@ -65,22 +65,22 @@ public class UserController {
         log.info("user/login");
         log.info(username+" "+password+"  "+code);
         User user = new User(username, password);
-//        try {
-//             kaptcha.validate(code);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            if (e instanceof KaptchaIncorrectException) {
-//                return new ResponseResult(410, "验证码不正确");
-//            } else if (e instanceof KaptchaNotFoundException) {
-//                return new ResponseResult(410, "验证码未找到");
-//            } else if (e instanceof KaptchaTimeoutException) {
-//                return new ResponseResult(410, "验证码过期");
-//            } else {
-//                return new ResponseResult(410, "验证码渲染失败");
-//            }
-//
-//        }
+        try {
+             kaptcha.validate(code);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (e instanceof KaptchaIncorrectException) {
+                return new ResponseResult(410, "验证码不正确");
+            } else if (e instanceof KaptchaNotFoundException) {
+                return new ResponseResult(410, "验证码未找到");
+            } else if (e instanceof KaptchaTimeoutException) {
+                return new ResponseResult(410, "验证码过期");
+            } else {
+                return new ResponseResult(410, "验证码渲染失败");
+            }
+
+        }
         //登录
         return userService.login(user);
     }
