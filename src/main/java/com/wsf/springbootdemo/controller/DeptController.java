@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wsf.springbootdemo.pojo.Dept;
+import com.wsf.springbootdemo.pojo.Employee;
 import com.wsf.springbootdemo.pojo.ResponseResult;
 import com.wsf.springbootdemo.pojo.Role;
 import com.wsf.springbootdemo.service.DeptService;
+import com.wsf.springbootdemo.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -30,6 +33,9 @@ public class DeptController {
 
     @Autowired
     private DeptService deptService;
+
+    @Autowired
+    private EmployeeService employeeService;
 
     @PostMapping("list")
     @PreAuthorize("hasAuthority('system:Dept:list')")
@@ -91,5 +97,12 @@ public class DeptController {
             return new ResponseResult(200,"修改状态成功");
         }
         else return  new ResponseResult(500,"修改状态失败");
+    }
+
+    @PostMapping("listEmp")
+    @PreAuthorize("hasAuthority('system:Dept:list')")
+    public ResponseResult listEmp(Long id){
+        List<Employee> employeeList = employeeService.list(new QueryWrapper<Employee>().eq(id != null, "dept_id", id));
+        return new ResponseResult(200,"请求员工列表成功",employeeList);
     }
 }
