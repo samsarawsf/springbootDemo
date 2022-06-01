@@ -59,6 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         Map<String ,String> map = new HashMap<>();
         map.put("token",jwt);
         map.put("nickName",loginUser.getUser().getNickName());
+        map.put("id",loginUser.getUser().getId().toString());
         //把完整的用户信息存入redis userid作为Key
         redisCache.setCacheObject("login:"+userid,loginUser);
         return new ResponseResult(200,"登录成功",map);

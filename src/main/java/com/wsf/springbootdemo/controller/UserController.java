@@ -226,4 +226,27 @@ public class UserController {
         System.out.println(token);
         return null;
     }
+
+    @PostMapping("updatePwd")
+    @Transactional
+    public ResponseResult updatePwd(Long id,String currentPass,String password){
+        User user = userService.getOne(new QueryWrapper<User>().eq(id != null, "id", id));
+        if(user!=null){
+            boolean matches = bCryptPasswordEncoder.matches(currentPass, user.getPassword());
+            if(matches){
+                String encode = bCryptPasswordEncoder.encode(password);
+                user.setPassword(encode);
+                boolean update = userService.updateById(user);
+                if(update){
+                    return new ResponseResult(200,"修改成功");
+                }else{
+                    return new ResponseResult(500,"修改失败");
+                }
+            }else{
+                return new ResponseResult(500,"密码错误");
+            }
+        }else{
+            return new ResponseResult(500,"没有该用户");
+        }
+    }
 }
