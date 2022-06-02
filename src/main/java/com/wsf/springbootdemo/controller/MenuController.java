@@ -8,6 +8,7 @@ import com.wsf.springbootdemo.pojo.Menu;
 import com.wsf.springbootdemo.pojo.ResponseResult;
 import com.wsf.springbootdemo.pojo.User;
 import com.wsf.springbootdemo.service.MenuService;
+import com.wsf.springbootdemo.service.RoleMenuService;
 import com.wsf.springbootdemo.utils.JWTUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class MenuController {
 
     @Autowired
     private MenuService menuService;
+
+    @Autowired
+    private RoleMenuService roleMenuService;
 
     @PostMapping("list")
     @PreAuthorize("hasAuthority('system:Menu:list')")
@@ -114,6 +118,10 @@ public class MenuController {
         return new ResponseResult(200,"获取权限列表成功",menuTree);
     }
 
-
+    @PostMapping("myMenuTree")
+    public ResponseResult myMenuTree(Long id){
+        List<Menu> myMenuTree = menuService.getMyMenuTree(id);
+        return new ResponseResult(200,"获取权限列表成功",myMenuTree);
+    }
 
 }

@@ -25,6 +25,11 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu>
     public boolean addRoleMenu(List<RoleMenu> roleMenus) {
         return roleMenuMapper.addRoleMenu(roleMenus);
     }
+
+    @Override
+    public List<Long> getMenuIdsByRoleId(Long roleId) {
+        return roleMenuMapper.getMenuIdsByRoleId(roleId);
+    }
 }
 
 

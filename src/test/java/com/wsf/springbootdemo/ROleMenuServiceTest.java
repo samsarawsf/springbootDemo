@@ -35,4 +35,10 @@ public class ROleMenuServiceTest {
         roleMenuService.remove(new QueryWrapper<RoleMenu>().eq("role_id",id));
         roleMenuService.addRoleMenu(roleMenus);
     }
+
+    @Test
+    public void testIds(){
+        List<Long> ids = roleMenuService.getMenuIdsByRoleId(2L);
+        ids.forEach(System.out::println);
+    }
 }

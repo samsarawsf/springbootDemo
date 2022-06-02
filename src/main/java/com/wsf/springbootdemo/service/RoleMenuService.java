@@ -12,4 +12,5 @@ import java.util.List;
 */
 public interface RoleMenuService extends IService<RoleMenu> {
     boolean addRoleMenu(List<RoleMenu> roleMenus);
+    List<Long> getMenuIdsByRoleId(Long roleId);
 }

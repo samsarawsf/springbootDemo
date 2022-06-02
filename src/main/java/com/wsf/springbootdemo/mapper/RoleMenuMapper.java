@@ -17,6 +17,8 @@ import java.util.List;
 @Mapper
 public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
     boolean addRoleMenu(List<RoleMenu> roleMenus);
+
+    List<Long> getMenuIdsByRoleId(Long roleId);
 }
 
 

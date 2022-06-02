@@ -12,4 +12,6 @@ import java.util.List;
 */
 public interface MenuService extends IService<Menu> {
     List<Menu> getMenuTree();
+
+    List<Menu> getMyMenuTree(Long id);
 }

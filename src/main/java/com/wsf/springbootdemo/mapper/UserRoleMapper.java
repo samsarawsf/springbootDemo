@@ -2,6 +2,7 @@ package com.wsf.springbootdemo.mapper;
 
 import com.wsf.springbootdemo.pojo.UserRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
 * @author weijin
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2022-05-25 21:55:10
 * @Entity com.wsf.springbootdemo.pojo.UserRole
 */
+@Repository
 public interface UserRoleMapper extends BaseMapper<UserRole> {
 
 }

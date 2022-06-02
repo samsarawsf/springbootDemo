@@ -21,4 +21,10 @@
             (#{item.roleId},#{item.menuId})
         </foreach>
     </insert>
+
+    <select id="getMenuIdsByRoleId" parameterType="long" resultType="long">
+        SELECT rm.menu_id
+        FROM sys_role_menu rm
+        WHERE role_id=#{roleId}
+    </select>
 </mapper>
