@@ -169,6 +169,23 @@ public class UserController {
         }
     }
 
+    @PostMapping("updateContent")
+    @Transactional
+    public ResponseResult updateContent(User user){
+        boolean update = userService.updateById(user);
+        if(update){
+            return new ResponseResult(200,"修改个人信息成功");
+        }else{
+            return new ResponseResult(500,"修改个人信息失败");
+        }
+    }
+
+    @PostMapping("getUserDetail")
+    public ResponseResult getUserDetail(Integer id){
+        User user = userService.getOne(new QueryWrapper<User>().eq(id != null, "id", id));
+        return new ResponseResult(200,user);
+    }
+
     @PostMapping("checkUserNme")
     public ResponseResult checkUserName(String userName){
         User user = userService.getOne(new QueryWrapper<User>().eq(StringUtils.isNotBlank(userName), "user_name", userName));

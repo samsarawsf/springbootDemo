@@ -58,8 +58,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String jwt = JWTUtil.getToken(tokenMap);
         Map<String ,String> map = new HashMap<>();
         map.put("token",jwt);
-        map.put("nickName",loginUser.getUser().getNickName());
         map.put("id",loginUser.getUser().getId().toString());
+        map.put("userName",loginUser.getUser().getUserName());
+        map.put("nickName",loginUser.getUser().getNickName());
+        map.put("phonenumber",loginUser.getUser().getPhonenumber());
+        map.put("sex",loginUser.getUser().getSex());
+        map.put("email",loginUser.getUser().getEmail());
         //把完整的用户信息存入redis userid作为Key
         redisCache.setCacheObject("login:"+userid,loginUser);
         return new ResponseResult(200,"登录成功",map);
