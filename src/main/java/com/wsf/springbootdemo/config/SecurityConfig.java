@@ -57,6 +57,8 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 //允许swagger-ui.html访问
                 .antMatchers("/swagger-ui/index.html","/doc.html","/static/**","/swagger-resources/**",
                         "/v2/**","/swagger-ui/**","/v3/**","/webjars/**").permitAll()
+                //允许druid数据源访问
+                .antMatchers("/druid/login.html","/druid/**").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()
