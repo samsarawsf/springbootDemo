@@ -1,16 +1,18 @@
 package com.wsf.springbootdemo.controller;
 
-import com.alibaba.fastjson.JSON;
+
 import com.auth0.jwt.interfaces.Claim;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wsf.springbootdemo.mapper.RoleMapper;
 import com.wsf.springbootdemo.pojo.*;
-import com.wsf.springbootdemo.service.MenuService;
 import com.wsf.springbootdemo.service.RoleMenuService;
 import com.wsf.springbootdemo.service.RoleService;
 import com.wsf.springbootdemo.utils.JWTUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,6 +29,7 @@ import java.util.*;
 @Slf4j
 @RestController
 @RequestMapping("/role")
+@Api(tags = "角色信息处理")
 public class RoleController {
 
     @Autowired
@@ -40,10 +43,17 @@ public class RoleController {
      * 根据权限查询角色数据
      * @param page 当前页
      * @param limit 条数
-     * @return
+     * @return 响应体
      */
     @PostMapping("list")
     @PreAuthorize("hasAuthority('system:Role:list')")
+    @Operation(summary = "查询角色列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "当前页",defaultValue = "1",dataTypeClass = Integer.class),
+            @ApiImplicitParam(name = "limit", value = "每页条数",defaultValue = "10",dataTypeClass = Integer.class),
+            @ApiImplicitParam(name = "roleName", value = "角色名称",dataTypeClass = String.class),
+            @ApiImplicitParam(name = "roleKey", value = "角色代码",dataTypeClass = String.class)
+    })
     public ResponseResult list(@RequestParam(required = false,defaultValue = "1") Integer page,
                                @RequestParam(required = false,defaultValue = "10") Integer limit,
                                String roleName, String roleKey){
@@ -58,7 +68,11 @@ public class RoleController {
 
 
     @PostMapping("menu")
-    @PreAuthorize("hasAuthority('system:Menu:list')")
+    @PreAuthorize("hasAuthority('system:Menu:list')")@Transactional(rollbackFor=Exception.class)
+    @Operation(summary = "根据ID查询角色权限")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户ID",dataTypeClass = Long.class)
+    })
     public ResponseResult menu(Long id){
         List<Long> menuIds = roleService.getMenuIdsByRoleId(id);
         return new ResponseResult(200,"请求权限成功",menuIds);
@@ -66,9 +80,13 @@ public class RoleController {
 
     @PostMapping("changemenu")
     @PreAuthorize("hasAuthority('system:Role:save')")
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
+    @Operation(summary = "修改角色权限")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "角色ID",dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "menuIds", value = "权限ID数组",dataTypeClass = Long.class)
+    })
     public ResponseResult changeMenu(Long id, Long[] menuIds){
-//        List<Long> menuIdss = JSON.parseArray(menuIds, Long.class);
         System.out.println(Arrays.toString(menuIds));
         log.info("id:"+id);
         List<RoleMenu> roleMenus = new ArrayList<>();
@@ -89,7 +107,11 @@ public class RoleController {
 
     @PostMapping("save")
     @PreAuthorize("hasAuthority('system:Role:save')")
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
+    @Operation(summary = "修改角色信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "role", value = "角色对象",dataTypeClass = Role.class)
+    })
     public ResponseResult save(Role role, HttpServletRequest request){
         String token = request.getHeader("token");
         Map<String, Claim> payloadFromToken = JWTUtil.getPayloadFromToken(token);
@@ -118,7 +140,11 @@ public class RoleController {
 
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('system:Role:delete')")
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
+    @Operation(summary = "根据ID删除角色")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "角色ID",dataTypeClass = Long.class)
+    })
     public ResponseResult delete(Long id){
         if( roleService.removeById(id)){
             return new ResponseResult(200,"删除成功");

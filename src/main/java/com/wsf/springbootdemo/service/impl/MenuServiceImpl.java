@@ -40,6 +40,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu>
      * 优化了一下
      * @return
      */
+    @Override
     public List<Menu> getMenuTree(){
 //        List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().eq("parent_id", 0));
 //        for (Menu menu:menus
@@ -59,7 +60,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu>
             //先寻找各自的孩子
             for (Menu e:menus
                  ) {
-                if(e.getParentId()==(menu.getId())){
+                if(e.getParentId().equals(menu.getId())){
                     menu.getMenus().add(e);
                 }
             }
@@ -83,7 +84,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu>
             //先寻找各自的孩子
             for (Menu e:menus
             ) {
-                if(e.getParentId()==(menu.getId())){
+                if(e.getParentId().equals(menu.getId())){
                     menu.getMenus().add(e);
                 }
             }

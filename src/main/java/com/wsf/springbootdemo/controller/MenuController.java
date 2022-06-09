@@ -6,10 +6,13 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wsf.springbootdemo.pojo.Menu;
 import com.wsf.springbootdemo.pojo.ResponseResult;
-import com.wsf.springbootdemo.pojo.User;
 import com.wsf.springbootdemo.service.MenuService;
 import com.wsf.springbootdemo.service.RoleMenuService;
 import com.wsf.springbootdemo.utils.JWTUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,6 +35,7 @@ import java.util.Objects;
 @Slf4j
 @RestController
 @RequestMapping("/menu")
+@Api(tags = "权限（菜单）信息处理")
 public class MenuController {
 
     @Autowired
@@ -42,6 +46,13 @@ public class MenuController {
 
     @PostMapping("list")
     @PreAuthorize("hasAuthority('system:Menu:list')")
+    @Operation(summary = "查询用户列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "当前页",defaultValue = "1",dataTypeClass = Integer.class),
+            @ApiImplicitParam(name = "limit", value = "每页条数",defaultValue = "10",dataTypeClass = Integer.class),
+            @ApiImplicitParam(name = "menuName", value = "权限名称",dataTypeClass = String.class),
+            @ApiImplicitParam(name = "perms", value = "权限代码",dataTypeClass = String.class)
+    })
     public ResponseResult list(@RequestParam(required = false,defaultValue = "1") Integer page,
                                @RequestParam(required = false,defaultValue = "10") Integer limit,
                                String menuName,String perms){
@@ -56,7 +67,12 @@ public class MenuController {
 
     @PostMapping("status")
     @PreAuthorize("hasAuthority('system:Menu:save')")
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
+    @Operation(summary = "修改状态")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "权限ID",dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "status", value = "状态",dataTypeClass = String.class),
+    })
     public ResponseResult status(Long id,String status){
         Menu menu = new Menu();
         menu.setId(id);
@@ -70,7 +86,11 @@ public class MenuController {
 
     @PostMapping("delete")
     @PreAuthorize("hasAuthority('system:Menu:delete')")
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "权限ID",dataTypeClass = Long.class)
+    })
+    @Operation(summary = "根据ID删除权限")
     public ResponseResult delete(Long id){
         if(menuService.removeById(id)){
             return new ResponseResult(200,"删除成功");
@@ -81,12 +101,19 @@ public class MenuController {
 
     @PostMapping("save")
     @PreAuthorize("hasAuthority('system:Menu:save')")
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
+    @Operation(summary = "修改权限信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "menu", value = "权限对象",dataTypeClass = Menu.class)
+    })
     public ResponseResult save(Menu menu, HttpServletRequest request){
         String token = request.getHeader("token");
         Map<String, Claim> payloadFromToken = JWTUtil.getPayloadFromToken(token);
         Claim claim = payloadFromToken.get("id");
         String id = claim.asString();
+        if(menu.getParentId()==null){
+            menu.setParentId(0L);
+        }
         if(Objects.isNull(menu.getId())){
             log.info("添加---------------"+menu);
             menu.setCreateTime(new Date());
@@ -113,12 +140,17 @@ public class MenuController {
 
     @PostMapping("tree")
     @PreAuthorize("hasAuthority('system:Menu:list')")
+    @Operation(summary = "查询所有权限的树状结构")
     public ResponseResult tree(){
         List<Menu> menuTree = menuService.getMenuTree();
         return new ResponseResult(200,"获取权限列表成功",menuTree);
     }
 
     @PostMapping("myMenuTree")
+    @Operation(summary = "根据ID查询权限的树状结构")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户ID",dataTypeClass = Long.class)
+    })
     public ResponseResult myMenuTree(Long id){
         List<Menu> myMenuTree = menuService.getMyMenuTree(id);
         return new ResponseResult(200,"获取权限列表成功",myMenuTree);

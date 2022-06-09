@@ -52,8 +52,17 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // 对于登录接口 允许匿名访问
                 .antMatchers("/user/login","/user/getKaptchaImg").anonymous()
+                //允许根路径url的访问
+                .antMatchers("/").permitAll()
+                //允许swagger-ui.html访问
+                .antMatchers("/swagger-ui/index.html","/doc.html","/static/**","/swagger-resources/**",
+                        "/v2/**","/swagger-ui/**","/v3/**","/webjars/**").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and()
+                .logout().permitAll()
+                .and()
+                .formLogin().permitAll();
 
         //添加过滤器
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
