@@ -45,6 +45,7 @@ spring:
         login-password: 123
         allow: 127.0.0.1
         #deny: 192.168.1.100
+    type: com.alibaba.druid.pool.DruidDataSource
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER

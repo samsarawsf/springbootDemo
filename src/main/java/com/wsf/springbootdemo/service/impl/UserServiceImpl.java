@@ -56,6 +56,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         HashMap<String, String> tokenMap = new HashMap<>();
         tokenMap.put("id",userid);
         String jwt = JWTUtil.getToken(tokenMap);
+        //返回给前端的jwt携带不敏感的用户信息
         Map<String ,String> map = new HashMap<>();
         map.put("token",jwt);
         map.put("id",loginUser.getUser().getId().toString());

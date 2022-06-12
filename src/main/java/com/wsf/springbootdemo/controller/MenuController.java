@@ -46,7 +46,7 @@ public class MenuController {
 
     @PostMapping("list")
     @PreAuthorize("hasAuthority('system:Menu:list')")
-    @Operation(summary = "查询用户列表")
+    @Operation(summary = "查询权限列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "当前页",defaultValue = "1",dataTypeClass = Integer.class),
             @ApiImplicitParam(name = "limit", value = "每页条数",defaultValue = "10",dataTypeClass = Integer.class),
@@ -107,8 +107,11 @@ public class MenuController {
             @ApiImplicitParam(name = "menu", value = "权限对象",dataTypeClass = Menu.class)
     })
     public ResponseResult save(Menu menu, HttpServletRequest request){
+        //从请求头中获取token
         String token = request.getHeader("token");
+        //解析token
         Map<String, Claim> payloadFromToken = JWTUtil.getPayloadFromToken(token);
+        //获取id
         Claim claim = payloadFromToken.get("id");
         String id = claim.asString();
         if(menu.getParentId()==null){

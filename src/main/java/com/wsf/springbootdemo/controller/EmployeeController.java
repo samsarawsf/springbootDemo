@@ -93,7 +93,7 @@ public class EmployeeController {
     @PostMapping("save")
     @PreAuthorize("hasAuthority('system:Emp:save')")
     @Transactional(rollbackFor=Exception.class)
-    @Operation(summary = "修改用户信息")
+    @Operation(summary = "修改员工信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "employee", value = "员工对象",dataTypeClass = Employee.class)
     })

@@ -41,7 +41,7 @@ public class DeptController {
 
     @PostMapping("list")
     @PreAuthorize("hasAuthority('system:Dept:list')")
-    @Operation(summary = "查询职位列表")
+    @Operation(summary = "查询部门列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "当前页",defaultValue = "1",dataTypeClass = Integer.class),
             @ApiImplicitParam(name = "limit", value = "每页条数",defaultValue = "10",dataTypeClass = Integer.class),
