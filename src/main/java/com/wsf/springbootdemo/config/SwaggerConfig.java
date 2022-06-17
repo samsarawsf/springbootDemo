@@ -31,9 +31,9 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
-                .title("汪随凡 SSM项目  API说明文档")
+                .title("API说明文档")
                 .description("人事管理系统(权限控制系统) API说明文档")
-                .contact(new Contact("汪随凡", "https://github.com/samsarawsf/springbootDemo", "1529907320@qq.com"))
+                .contact(new Contact("wsf, "https://github.com/samsarawsf/springbootDemo", "1529907320@qq.com"))
                 .termsOfServiceUrl("https://github.com/samsarawsf/springbootDemo")
                 .version("1.0")
                 .build();
